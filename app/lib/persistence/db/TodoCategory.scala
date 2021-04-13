@@ -26,8 +26,8 @@ case class TodoCategoryTable[P <: JdbcProfile]()(implicit val driver:P)
     // Columns
     /* @1 */ def id        = column[Id]           ("id",         O.UInt64, O.PrimaryKey, O.AutoInc)
     /* @2 */ def name      = column[String]       ("name",       O.Utf8Char255)
-    /* @3 */ def slug      = column[String]       ("name",       O.AsciiChar64)
-    /* @4 */ def color     = column[Color]        ("name",       O.UInt8)
+    /* @3 */ def slug      = column[String]       ("slug",       O.AsciiChar64)
+    /* @4 */ def color     = column[Color]        ("color",       O.UInt8)
     /* @5 */ def updatedAt = column[LocalDateTime]("updated_at", O.TsCurrent)
     /* @6 */ def createdAt = column[LocalDateTime]("created_at", O.Ts)
 

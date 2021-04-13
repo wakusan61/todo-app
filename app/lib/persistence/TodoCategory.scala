@@ -44,4 +44,9 @@ case class TodoCategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
         }
       } yield old
     }
+
+  def list(): Future[Seq[EntityEmbeddedId]] =
+    RunDBAction(TodoCategoryTable,"slave") {
+      _.result
+    }
 }
