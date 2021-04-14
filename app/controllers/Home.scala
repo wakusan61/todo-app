@@ -6,10 +6,15 @@
 
 package controllers
 
+import lib.persistence.{TodoCategoryRepository, TodoRepository}
+import model.ViewValueHome
+
 import javax.inject._
 import play.api.mvc._
+import slick.jdbc.{JdbcProfile, MySQLProfile}
 
-import model.ViewValueHome
+import scala.concurrent.ExecutionContext
+
 
 @Singleton
 class HomeController @Inject()(val controllerComponents: ControllerComponents) extends BaseController {

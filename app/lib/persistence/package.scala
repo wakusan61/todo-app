@@ -5,12 +5,15 @@
 
 package lib
 
+import ixias.persistence.dbio.Execution.defaultExecutionContext
+
 package object persistence {
 
   val default = onMySQL
   
   object onMySQL {
     implicit lazy val driver = slick.jdbc.MySQLProfile
-    object UserRepository extends UserRepository
+    object TodoRepository extends TodoRepository
+    object TodoCategoryRepository extends TodoCategoryRepository
   }
 }

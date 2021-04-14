@@ -1,0 +1,23 @@
+@(vv: model.ViewValueTodoList)
+@common.Default(vv){
+<table>
+    <thead>
+        <tr>
+            <th>タイトル</th>
+            <th>ステータス</th>
+            <th>カテゴリ</th>
+            <th>本文</th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(todo <- vv.todoList) {
+        <tr>
+            <td>@todo.title</td>
+            <td>@todo.state.name</td>
+            <td>@todo.categoryName</td>
+            <td>@todo.body</td>
+        </tr>
+        }
+    </tbody>
+</table>
+}
