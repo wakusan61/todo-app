@@ -4,7 +4,6 @@ import ixias.persistence.SlickRepository
 import lib.model.Todo
 import slick.jdbc.JdbcProfile
 
-import javax.inject.Inject
 import scala.concurrent.Future
 
 case class TodoRepository[P <: JdbcProfile] (implicit val driver: P)

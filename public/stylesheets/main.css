@@ -38,6 +38,13 @@ body {
   text-align:  center;
 }
 
+th {
+  border: 1px solid;
+}
+
+td {
+  border: 1px solid;
+}
 
 /******* フォームのinfoを非表示に *******/
 .info {

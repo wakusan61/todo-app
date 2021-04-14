@@ -7,5 +7,5 @@ CREATE TABLE `to_do` (
          `updated_at`  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
          `created_at`  TIMESTAMP           NOT NULL DEFAULT CURRENT_TIMESTAMP,
          PRIMARY KEY (`id`) ,
-         FOREIGN KEY (`id`) REFERENCES `to_do_category` (`id`)
+         FOREIGN KEY (`category_id`) REFERENCES `to_do_category` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;

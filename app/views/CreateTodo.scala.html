@@ -1,0 +1,19 @@
+@(vv: model.ViewValueCreateTodo)(implicit request: MessagesRequestHeader)
+@common.Default(vv){
+    @helper.form(vv.action) {
+        @helper.CSRF.formField
+
+        @helper.inputText(vv.form("title"))
+        @helper.textarea(vv.form("body"))
+        @helper.inputText(vv.form("categoryId"))
+        <button>Todo作成</button>
+    }
+
+    @if(vv.form.hasGlobalErrors) {
+    <ul>
+        @for(error <- vv.form.globalErrors) {
+        <li>@error.format</li>
+        }
+    </ul>
+    }
+}
