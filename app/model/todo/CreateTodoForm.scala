@@ -1,9 +1,9 @@
-package model
+package model.todo
 
-import lib.model.{Todo, TodoCategory}
 import lib.model.Todo.Status
+import lib.model.{Todo, TodoCategory}
 import play.api.data.Form
-import play.api.data.Forms.{longNumber, mapping, nonEmptyText, shortNumber}
+import play.api.data.Forms.{longNumber, mapping, nonEmptyText}
 
 object CreateTodoForm {
   case class TodoData(title:String, body:String, categoryId:Long){

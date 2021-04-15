@@ -15,7 +15,8 @@ case class ViewValueHome(
   cssSrc:           Seq[String],
   jsSrc:            Seq[String],
   link:             Map[String,String] = Map(
-    "todoList" -> routes.TodoController.list().url
+    "todoList" -> routes.TodoController.list().url,
+    "categoryList" -> routes.CategoryController.list().url,
   )
 ) extends ViewValueCommon
 

@@ -1,8 +1,9 @@
-package model
+package model.todo
 
 import controllers.routes
 import lib.model.Todo
-import play.api.mvc.{Action, Call, Result}
+import model.ViewValueCommon
+import play.api.mvc.Call
 
 case class ViewValueTodoList(
   title:            String = "Todo一覧",

@@ -1,4 +1,4 @@
-@(vv: model.ViewValueCreateTodo)(implicit request: MessagesRequestHeader)
+@(vv: model.todo.ViewValueCreateTodo)(implicit request: MessagesRequestHeader)
 @common.Default(vv){
     @helper.form(vv.action) {
         @helper.CSRF.formField

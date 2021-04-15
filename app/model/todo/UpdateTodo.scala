@@ -1,7 +1,8 @@
-package model
+package model.todo
 
 import controllers.routes
 import lib.model.Todo.Status
+import model.ViewValueCommon
 import play.api.data.Form
 import play.api.mvc.Call
 
