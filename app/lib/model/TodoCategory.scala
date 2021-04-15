@@ -21,9 +21,9 @@ object TodoCategory {
 
   sealed abstract class Color(val code:Short,val name:String) extends EnumStatus
   object Color extends EnumStatus.Of[Color] {
-    case object RED     extends Color(code = 1,name = "赤")
-    case object BLUE    extends Color(code = 2,name = "青")
-    case object GREEN   extends Color(code = 3,name = "緑")
+    case object RED     extends Color(code = 1,name = "red")
+    case object BLUE    extends Color(code = 2,name = "blue")
+    case object GREEN   extends Color(code = 3,name = "green")
   }
 
   def apply(name:String,slug:String,color:Color):WithNoId = {

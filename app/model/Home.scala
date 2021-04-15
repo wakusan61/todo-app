@@ -6,13 +6,16 @@
 
 package model
 
-import ixias.model.Entity
-import lib.model.{Todo, TodoCategory}
+import controllers.routes
+import play.api.mvc.Call
 
 // Topページのviewvalue
 case class ViewValueHome(
   title:            String,
   cssSrc:           Seq[String],
   jsSrc:            Seq[String],
+  link:             Map[String,String] = Map(
+    "todoList" -> routes.TodoController.list().url
+  )
 ) extends ViewValueCommon
 

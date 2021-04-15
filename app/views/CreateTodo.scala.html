@@ -3,10 +3,15 @@
     @helper.form(vv.action) {
         @helper.CSRF.formField
 
-        @helper.inputText(vv.form("title"))
-        @helper.textarea(vv.form("body"))
-        @helper.inputText(vv.form("categoryId"))
-        <button>Todo作成</button>
+        @helper.inputText(vv.form("title"), '_label -> "タイトル")
+        @helper.textarea(vv.form("body"), '_label -> "本文")
+        @helper.select(
+            field = vv.form("categoryId"),
+            options = vv.todoCategorySelect,
+            args = '_label -> "カテゴリ"
+        )
+        <button type="submit">作成</button>
+        <button type="button" onclick="history.back()">戻る</button>
     }
 
     @if(vv.form.hasGlobalErrors) {

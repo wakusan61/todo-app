@@ -2,7 +2,7 @@ package controllers
 
 import lib.persistence.onMySQL.TodoCategoryRepository
 import lib.persistence.onMySQL.TodoRepository
-import model.{TodoForm, ViewValueCreateTodo, ViewValueTodo, ViewValueTodoList}
+import model.{CreateTodoForm, ViewValueCreateTodo, ViewValueTodo, ViewValueTodoList}
 import play.api.mvc.{MessagesAbstractController, MessagesControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -26,20 +26,26 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
         ViewValueTodo.from(todo,todoCategorySeq.find(_.v.id.get == todo.v.categoryId).get)
       })
       Ok(views.html.TodoList(ViewValueTodoList(
-        title     = "ToDoリスト",
-        cssSrc    = Seq("main.css"),
-        jsSrc     = Seq("main.js"),
         todoList  =  todoList
       )))
     }
   }
 
-  def createForm() = Action.async { implicit req =>
-    Future(Ok(views.html.CreateTodo(ViewValueCreateTodo())))
+  def showCreateForm() = Action.async { implicit req =>
+    TodoCategoryRepository.list()
+      .map(categorySeq => {
+        val categorySelect = categorySeq.map(category => (category.v.id.get.toString,category.v.name))
+        Ok(views.html.CreateTodo(ViewValueCreateTodo(todoCategorySelect = categorySelect)))
+      }).recoverWith {
+        case t =>  Future(BadRequest(views.html.CreateTodo(
+          ViewValueCreateTodo(
+            form = CreateTodoForm.form.withGlobalError(s"Todoカテゴリ取得時にエラーが発生しました。:${t.getMessage}")
+          ))))
+      }
   }
 
   def create() = Action.async { implicit req =>
-    TodoForm.form.bindFromRequest().fold(
+    CreateTodoForm.form.bindFromRequest().fold(
       hasErrors => {
         Future(BadRequest(views.html.CreateTodo(ViewValueCreateTodo(form = hasErrors))))
       },
@@ -48,7 +54,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
           .map(_ => Redirect(routes.TodoController.list()))
           .recoverWith {
             case e => {
-              val form = TodoForm.form.fill(todoData).withGlobalError(e.getMessage,e.getStackTrace)
+              val form = CreateTodoForm.form.fill(todoData).withGlobalError(s"DB登録時にエラーが発生しました:${e.getMessage}")
               Future(BadRequest(views.html.CreateTodo(ViewValueCreateTodo(form = form))))
             }}
       }

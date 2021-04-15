@@ -5,7 +5,7 @@ import lib.model.Todo.Status
 import play.api.data.Form
 import play.api.data.Forms.{longNumber, mapping, nonEmptyText, shortNumber}
 
-object TodoForm {
+object CreateTodoForm {
   case class TodoData(title:String, body:String, categoryId:Long){
     def toWithNoId():Todo#WithNoId =  new Todo(
       id = None,
