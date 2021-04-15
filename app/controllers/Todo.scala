@@ -5,6 +5,7 @@ import lib.model.Todo
 import lib.persistence.onMySQL.TodoCategoryRepository
 import lib.persistence.onMySQL.TodoRepository
 import model.{CreateTodoForm, UpdateTodoForm, ViewValueCreateTodo, ViewValueError, ViewValueTodo, ViewValueTodoList, ViewValueUpdateTodo}
+import play.api.data.Form
 import play.api.mvc.{MessagesAbstractController, MessagesControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -107,8 +108,6 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
   def update() = Action.async {implicit req =>
     UpdateTodoForm.form.bindFromRequest().fold (
       hasErrors => {
-        println(hasErrors.errors)
-        println(hasErrors.globalErrors)
         Future(BadRequest(views.html.UpdateTodo(ViewValueUpdateTodo(form = hasErrors))))
       }
       ,todoData => {
@@ -123,5 +122,22 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
           }
       }
     )
+  }
+
+  /**
+   * Todoを削除します。
+   * @param id
+   * @return
+   */
+  def remove(id: Long) = Action.async {implicit req =>
+    TodoRepository.remove(tag[Todo][Long](id))
+      .map(_ => Redirect(routes.TodoController.list()))
+      .recoverWith{
+        case e => {
+          Future(InternalServerError(views.html.Error(
+            ViewValueError(message = "Todoの削除に失敗しました。", throwable = Some(e)))
+          ))
+        }
+      }
   }
 }

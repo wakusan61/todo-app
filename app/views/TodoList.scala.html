@@ -1,5 +1,6 @@
-@(vv: model.ViewValueTodoList)
+@(vv: model.ViewValueTodoList)(implicit request: MessagesRequestHeader)
 @common.Default(vv){
+<button onclick="location.href='@vv.link("home")'">戻る</button>
 <button onclick="location.href='@vv.link("createForm")'">Todo作成</button>
 <table>
     <thead>
@@ -8,6 +9,7 @@
             <th>ステータス</th>
             <th>カテゴリ</th>
             <th>本文</th>
+            <th></th>
             <th></th>
         </tr>
     </thead>
@@ -20,6 +22,12 @@
             <td>@todo.body</td>
             <td>
                 <button onclick="location.href='/todo/update/@todo.id'">更新</button>
+            </td>
+            <td>
+                @helper.form(vv.removeCall(todo.id.get)) {
+                    @helper.CSRF.formField
+                    <button>削除</button>
+                }
             </td>
         </tr>
         }
