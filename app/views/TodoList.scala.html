@@ -1,6 +1,6 @@
 @(vv: model.ViewValueTodoList)
 @common.Default(vv){
-<a href="@vv.link("createForm")">Todo作成</a>
+<button onclick="location.href='@vv.link("createForm")'">Todo作成</button>
 <table>
     <thead>
         <tr>
@@ -18,7 +18,9 @@
             <td>@todo.state.name</td>
             <td style="color:@todo.color.name">@todo.categoryName</td>
             <td>@todo.body</td>
-            <td></td>
+            <td>
+                <button onclick="location.href='/todo/update/@todo.id'">更新</button>
+            </td>
         </tr>
         }
     </tbody>

@@ -9,5 +9,6 @@ case class ViewValueTodoList(
   todoList:         Seq[ViewValueTodo] = Nil,
   link:             Map[String,String] = Map(
     "createForm" -> routes.TodoController.showCreateForm().url
-  )
+  ),
+  errors:           Seq[String] = Nil
 ) extends ViewValueCommon

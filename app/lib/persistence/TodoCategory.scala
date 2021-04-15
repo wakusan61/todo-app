@@ -16,12 +16,12 @@ case class TodoCategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
       .result.headOption
     }
 
-  override def add(entity: EntityWithNoId): Future[Id] =
+  def add(entity: EntityWithNoId): Future[Id] =
     RunDBAction(TodoCategoryTable) { slick =>
       slick returning slick.map(_.id) += entity.v
     }
 
-  override def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
+  def update(entity: EntityEmbeddedId): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoCategoryTable) { slick =>
       val row = slick.filter(_.id === entity.id)
       for {
@@ -33,7 +33,7 @@ case class TodoCategoryRepository[P <: JdbcProfile]()(implicit val driver: P)
       } yield old
     }
 
-  override def remove(id: Id): Future[Option[EntityEmbeddedId]] =
+  def remove(id: Id): Future[Option[EntityEmbeddedId]] =
     RunDBAction(TodoCategoryTable) {slick =>
       val row = slick.filter(_.id === id)
       for {

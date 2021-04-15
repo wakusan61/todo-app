@@ -1,0 +1,12 @@
+@(vv: model.ViewValueError)
+
+@common.Default(vv){
+  <label>エラーメッセージ:</label>
+  <b style="color: red;">@vv.message</b>
+  @if(!vv.throwable.isEmpty) {
+    <label>詳細:</label>
+    <p>@@vv.throwable.getMessage</p>
+    <p>@@vv.throwable.getStackTrace</p>
+  }
+  <button type="button" onclick="history.back()">戻る</button>
+}

@@ -1,16 +1,24 @@
-@(vv: model.ViewValueCreateTodo)(implicit request: MessagesRequestHeader)
+@(vv: model.ViewValueUpdateTodo)(implicit request: MessagesRequestHeader)
+
 @common.Default(vv){
     @helper.form(vv.action) {
         @helper.CSRF.formField
-
+        @helper.inputText(vv.form("id"), 'type -> "hidden" , '_label -> "")
         @helper.inputText(vv.form("title"), '_label -> "タイトル")
         @helper.select(
-            field   = vv.form("categoryId"),
-            options = vv.todoCategorySelect,
-            args    = '_label -> "カテゴリ"
+            field = vv.form("state"),
+            options = vv.stateSelect,
+            args = '_label -> "ステータス",
         )
+
+        @helper.select(
+            field = vv.form("categoryId"),
+            options = vv.todoCategorySelect,
+            args = '_label -> "カテゴリ"
+        )
+
         @helper.textarea(vv.form("body"), '_label -> "本文")
-        <button type="submit">作成</button>
+        <button type="submit">更新</button>
         <button type="button" onclick="history.back()">戻る</button>
     }
 

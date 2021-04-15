@@ -8,6 +8,8 @@ GET     /                             controllers.HomeController.index
 GET     /todo                         controllers.TodoController.list
 GET     /todo/create                  controllers.TodoController.showCreateForm
 POST    /todo/create                  controllers.TodoController.create
+GET     /todo/update/:id              controllers.TodoController.showUpdateForm(id: Long)
+POST    /todo/update                  controllers.TodoController.update()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.versioned(path="/public", file: Asset)

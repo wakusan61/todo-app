@@ -1,8 +1,10 @@
 package controllers
 
+import ixias.model.tag
+import lib.model.Todo
 import lib.persistence.onMySQL.TodoCategoryRepository
 import lib.persistence.onMySQL.TodoRepository
-import model.{CreateTodoForm, ViewValueCreateTodo, ViewValueTodo, ViewValueTodoList}
+import model.{CreateTodoForm, UpdateTodoForm, ViewValueCreateTodo, ViewValueError, ViewValueTodo, ViewValueTodoList, ViewValueUpdateTodo}
 import play.api.mvc.{MessagesAbstractController, MessagesControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -31,6 +33,10 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
     }
   }
 
+  /**
+   * Todo作成フォームを表示します。
+   * @return
+   */
   def showCreateForm() = Action.async { implicit req =>
     TodoCategoryRepository.list()
       .map(categorySeq => {
@@ -44,6 +50,10 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
       }
   }
 
+  /**
+   * フォームからTodoを作成します。
+   * @return
+   */
   def create() = Action.async { implicit req =>
     CreateTodoForm.form.bindFromRequest().fold(
       hasErrors => {
@@ -54,9 +64,63 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
           .map(_ => Redirect(routes.TodoController.list()))
           .recoverWith {
             case e => {
-              val form = CreateTodoForm.form.fill(todoData).withGlobalError(s"DB登録時にエラーが発生しました:${e.getMessage}")
-              Future(BadRequest(views.html.CreateTodo(ViewValueCreateTodo(form = form))))
+              Future(InternalServerError(views.html.Error(
+                ViewValueError(message = "Todoの作成に失敗しました。", throwable = Some(e)))
+              ))
             }}
+      }
+    )
+  }
+
+  /**
+   * 更新フォームを表示します。
+   * @param id TodoId
+   * @return
+   */
+  def showUpdateForm(id: Long) = Action.async {implicit req =>
+    for {
+      todo <- TodoRepository.get(tag[Todo][Long](id))
+      categorySeq <- TodoCategoryRepository.list()
+    } yield {
+      todo match {
+        case None => NotFound(views.html.Error(ViewValueError(message = "Todoが存在しません。")))
+        case Some(t) => {
+          val categorySelect = categorySeq.map(category => (category.v.id.get.toString,category.v.name))
+          val form = UpdateTodoForm.form.fill(UpdateTodoForm.TodoData(
+            id          = t.v.id.get,
+            title       = t.v.title,
+            body        = t.v.body,
+            categoryId  = t.v.categoryId,
+            state       = t.v.state.code
+          ))
+          Ok(views.html.UpdateTodo(ViewValueUpdateTodo(todoCategorySelect = categorySelect,form = form)))
+        }
+      }
+    }
+  }
+
+  /**
+   * フォームからTodoを更新します。
+   *
+   * @return
+   */
+  def update() = Action.async {implicit req =>
+    UpdateTodoForm.form.bindFromRequest().fold (
+      hasErrors => {
+        println(hasErrors.errors)
+        println(hasErrors.globalErrors)
+        Future(BadRequest(views.html.UpdateTodo(ViewValueUpdateTodo(form = hasErrors))))
+      }
+      ,todoData => {
+        TodoRepository.update(todoData.toEmbeddedId())
+          .map(_ => Redirect(routes.TodoController.list()))
+          .recoverWith{
+            case e => {
+              Future(InternalServerError(views.html.Error(
+                ViewValueError(message = "Todoの更新に失敗しました。", throwable = Some(e)))
+              ))
+            }
+          }
       }
     )
   }
