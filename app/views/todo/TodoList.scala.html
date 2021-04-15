@@ -1,4 +1,4 @@
-@(vv: model.ViewValueTodoList)(implicit request: MessagesRequestHeader)
+@(vv: model.todo.ViewValueTodoList)(implicit request: MessagesRequestHeader)
 @common.Default(vv){
 <button onclick="location.href='@vv.link("home")'">戻る</button>
 <button onclick="location.href='@vv.link("createForm")'">Todo作成</button>

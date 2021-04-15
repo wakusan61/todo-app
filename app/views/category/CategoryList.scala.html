@@ -1,0 +1,26 @@
+@(vv: model.category.ViewValueCategoryList)(implicit request: MessagesRequestHeader)
+@common.Default(vv){
+<button onclick="location.href='@vv.link("home")'">戻る</button>
+<table>
+    <thead>
+        <tr>
+            <th>カテゴリー名</th>
+            <th>slug</th>
+            <th>色</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @for(category <- vv.categoryList) {
+        <tr>
+            <td>@category.name</td>
+            <td>@category.slug</td>
+            <td>@category.color.name</td>
+            <td><button>更新</button></td>
+            <td><button>削除</button></td>
+        </tr>
+        }
+    </tbody>
+</table>
+}

@@ -4,8 +4,8 @@ import ixias.model.tag
 import lib.model.Todo
 import lib.persistence.onMySQL.TodoCategoryRepository
 import lib.persistence.onMySQL.TodoRepository
-import model.{CreateTodoForm, UpdateTodoForm, ViewValueCreateTodo, ViewValueError, ViewValueTodo, ViewValueTodoList, ViewValueUpdateTodo}
-import play.api.data.Form
+import model.ViewValueError
+import model.todo.{CreateTodoForm, UpdateTodoForm, ViewValueCreateTodo, ViewValueTodo, ViewValueTodoList, ViewValueUpdateTodo}
 import play.api.mvc.{MessagesAbstractController, MessagesControllerComponents}
 
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -28,7 +28,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
       val todoList = todoSeq.map(todo => {
         ViewValueTodo.from(todo,todoCategorySeq.find(_.v.id.get == todo.v.categoryId).get)
       })
-      Ok(views.html.TodoList(ViewValueTodoList(
+      Ok(views.html.todo.TodoList(ViewValueTodoList(
         todoList  =  todoList
       )))
     }
@@ -42,9 +42,9 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
     TodoCategoryRepository.list()
       .map(categorySeq => {
         val categorySelect = categorySeq.map(category => (category.v.id.get.toString,category.v.name))
-        Ok(views.html.CreateTodo(ViewValueCreateTodo(todoCategorySelect = categorySelect)))
+        Ok(views.html.todo.CreateTodo(ViewValueCreateTodo(todoCategorySelect = categorySelect)))
       }).recoverWith {
-        case t =>  Future(BadRequest(views.html.CreateTodo(
+        case t =>  Future(BadRequest(views.html.todo.CreateTodo(
           ViewValueCreateTodo(
             form = CreateTodoForm.form.withGlobalError(s"Todoカテゴリ取得時にエラーが発生しました。:${t.getMessage}")
           ))))
@@ -58,7 +58,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
   def create() = Action.async { implicit req =>
     CreateTodoForm.form.bindFromRequest().fold(
       hasErrors => {
-        Future(BadRequest(views.html.CreateTodo(ViewValueCreateTodo(form = hasErrors))))
+        Future(BadRequest(views.html.todo.CreateTodo(ViewValueCreateTodo(form = hasErrors))))
       },
       todoData => {
         TodoRepository.add(todoData.toWithNoId())
@@ -94,7 +94,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
             categoryId  = t.v.categoryId,
             state       = t.v.state.code
           ))
-          Ok(views.html.UpdateTodo(ViewValueUpdateTodo(todoCategorySelect = categorySelect,form = form)))
+          Ok(views.html.todo.UpdateTodo(ViewValueUpdateTodo(todoCategorySelect = categorySelect,form = form)))
         }
       }
     }
@@ -108,7 +108,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
   def update() = Action.async {implicit req =>
     UpdateTodoForm.form.bindFromRequest().fold (
       hasErrors => {
-        Future(BadRequest(views.html.UpdateTodo(ViewValueUpdateTodo(form = hasErrors))))
+        Future(BadRequest(views.html.todo.UpdateTodo(ViewValueUpdateTodo(form = hasErrors))))
       }
       ,todoData => {
         TodoRepository.update(todoData.toEmbeddedId())

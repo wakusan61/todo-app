@@ -1,4 +1,4 @@
-package model
+package model.todo
 
 import lib.model.Todo.Status
 import lib.model.TodoCategory.Color
