@@ -15,7 +15,7 @@ object CreateCategoryForm {
   val form = Form(
     mapping (
       "name" -> nonEmptyText,
-      "slug" -> nonEmptyText,
+      "slug" -> nonEmptyText.verifying(Validation.alphabeticPattern),
       "color" -> shortNumber
     )(CategoryData.apply)(CategoryData.unapply)
   )
