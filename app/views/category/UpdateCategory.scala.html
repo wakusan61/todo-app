@@ -1,0 +1,26 @@
+@(vv: model.category.ViewValueUpdateCategory)(implicit request: MessagesRequestHeader)
+
+@common.Default(vv){
+  @helper.form(vv.action) {
+    @helper.CSRF.formField
+
+    @helper.inputText(vv.form("id"), 'type -> "hidden" , '_label -> "")
+    @helper.inputText(vv.form("name"), '_label -> "カテゴリー名")
+    @helper.inputText(vv.form("slug"), '_label -> "slug")
+    @helper.select(
+      field   = vv.form("color"),
+      options = vv.colorSelect,
+      args    = '_label -> "カラー"
+    )
+    <button type="submit">更新</button>
+    <button type="button" onclick="history.back()">戻る</button>
+  }
+
+  @if(vv.form.hasGlobalErrors) {
+    <ul>
+      @for(error <- vv.form.globalErrors) {
+      <li>@error.format</li>
+      }
+    </ul>
+  }
+}

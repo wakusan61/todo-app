@@ -12,6 +12,7 @@ case class ViewValueCategoryList(
   categoryList:        Seq[TodoCategory]              = Nil,
   colorSelect:         Seq[(String,String)]           = Color.values.map(color =>(color.code.toString,color.name)),
   link:                Map[String,String]             = Map(
-    "home" -> routes.HomeController.index().url
-  ),
+    "home" -> routes.HomeController.index().url,
+    "createCategory" -> routes.CategoryController.create().url
+  )
 ) extends ViewValueCommon

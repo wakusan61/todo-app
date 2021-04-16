@@ -1,6 +1,7 @@
 @(vv: model.category.ViewValueCategoryList)(implicit request: MessagesRequestHeader)
 @common.Default(vv){
 <button onclick="location.href='@vv.link("home")'">戻る</button>
+<button onclick="location.href='@vv.link("createCategory")'">カテゴリー作成</button>
 <table>
     <thead>
         <tr>
@@ -14,11 +15,16 @@
     <tbody>
         @for(category <- vv.categoryList) {
         <tr>
-            <td>@category.name</td>
+            <td style="color: @category.color.name">@category.name</td>
             <td>@category.slug</td>
             <td>@category.color.name</td>
-            <td><button>更新</button></td>
-            <td><button>削除</button></td>
+            <td><button onclick="location.href='@controllers.routes.CategoryController.showUpdateForm(category.id.get)'">更新</button></td>
+            <td>
+                @helper.form(controllers.routes.CategoryController.removeWithTodo(category.id.get)) {
+                    @helper.CSRF.formField
+                    <button>削除</button>
+                }
+            </td>
         </tr>
         }
     </tbody>

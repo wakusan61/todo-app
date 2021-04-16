@@ -126,7 +126,7 @@ class TodoController @Inject()(val messagesControllerComponents: MessagesControl
 
   /**
    * Todoを削除します。
-   * @param id
+   * @param id TodoID
    * @return
    */
   def remove(id: Long) = Action.async {implicit req =>
